@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api")
+@RestController("/certificado")
 public class CriaCertController {
     private class Response implements Serializable {
         public Response(String status, String message) {
@@ -29,10 +29,10 @@ public class CriaCertController {
 
     public Response gercert(
             @RequestParam(defaultValue = "") String subject,
-            @RequestParam String serialNumber,
-            @RequestParam Integer validityInDays,
-            @RequestParam String nome,
-            @RequestParam String cpf
+            @RequestParam(defaultValue = "") String serialNumber,
+            @RequestParam(defaultValue = "0") Integer validityInDays,
+            @RequestParam(defaultValue = "") String nome,
+            @RequestParam(defaultValue = "") String cpf
 
     )throws Exception {
         KeyPair myKeyPair = CriaCertificadoTest.genKeyPair(2048);
