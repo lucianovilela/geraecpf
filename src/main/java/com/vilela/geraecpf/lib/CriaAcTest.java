@@ -1,4 +1,4 @@
-package com.vilela.geraecpf;
+package com.vilela.geraecpf.lib;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
