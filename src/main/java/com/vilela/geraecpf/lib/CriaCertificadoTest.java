@@ -1,7 +1,7 @@
 package com.vilela.geraecpf.lib;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,22 +88,23 @@ public class CriaCertificadoTest {
         int validityDays = 365 * 3;
         X509Certificate cert = createCert("C=BR,O=ICP-Brasil,OU=AR Teste,OU=RFB e-CPF A3,OU=TESTE,CN=" + nome + ":" + cpf,
                 new BigInteger("3333333333", 16), validityDays, myKeyPair, acKeyPair, acSubject, cpf, acCert);
-        saveToKeystore(cert, myKeyPair.getPrivate(), filename + ".pfx", "PKCS12", acCert);
+        saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert);
         saveToFile(cert, filename + ".cer");
 
         System.out.println(cert);
     }
 
-    static void saveToKeystore(X509Certificate certificate, PrivateKey privKey, String file, String type, X509Certificate acCert) throws Exception {
+    static public OutputStream saveToKeystore(X509Certificate certificate, PrivateKey privKey,  String type, X509Certificate acCert) throws Exception {
         char[] password = "123456".toCharArray();
         KeyStore ks = KeyStore.getInstance(type);
         ks.load(null, password);
 
         ks.setKeyEntry("main", privKey, password, new Certificate[] { certificate, acCert });
 
-        OutputStream out = new FileOutputStream(file);
+        OutputStream out = new ByteArrayOutputStream();
         ks.store(out, password);
-        out.close();
+        //out.close();
+        return out;
     }
 
     static void saveToFile(X509Certificate cert, String filename) throws IOException {

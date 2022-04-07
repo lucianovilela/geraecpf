@@ -1,5 +1,6 @@
 package com.vilela.geraecpf.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -8,6 +9,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
+import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,7 +64,9 @@ public class CriaCertController {
                 myKeyPair,
                 acKeyPair,
                 acSubject, cpf, acCert);
-        return new Response("ok", cert.toString());
+        ByteArrayOutputStream out =(ByteArrayOutputStream) CriaCertificadoTest.saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert);
+        
+        return new Response("ok",  new String(Base64.encode(out.toByteArray())));
     }
 
 }
