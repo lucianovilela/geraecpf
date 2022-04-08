@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/certificado")
+@RestController()
 public class CriaCertController {
     private class Response implements Serializable {
         public Response(String status, String message) {
