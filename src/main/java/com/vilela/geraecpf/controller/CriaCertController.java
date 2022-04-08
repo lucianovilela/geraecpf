@@ -1,6 +1,6 @@
-package com.vilela.geraecpf;
+package com.vilela.geraecpf.controller;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -9,12 +9,22 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.bouncycastle.util.encoders.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController()
+import com.vilela.geraecpf.lib.CriaCertificadoTest;
+
+@RestController("")
+@RequestMapping("/certificado")
 public class CriaCertController {
+	
+	@Value("classpath:actest.jks")
+	Resource jksfile;
     private class Response implements Serializable {
         public Response(String status, String message) {
             this.status = status;
@@ -25,14 +35,13 @@ public class CriaCertController {
         public String message;
     }
 
-    @GetMapping("/pessoaFisica")
-
+    @PostMapping("pessoaFisica")
     public Response gercert(
-            @RequestParam(defaultValue = "") String subject,
-            @RequestParam(defaultValue = "") String serialNumber,
-            @RequestParam(defaultValue = "0") Integer validityInDays,
-            @RequestParam(defaultValue = "") String nome,
-            @RequestParam(defaultValue = "") String cpf
+            @RequestParam(defaultValue = "C=BR,O=ICP-Brasil,OU=AR Teste,OU=RFB e-CPF A3,OU=TESTE,CN=teste:11111111111", required = false) String subject,
+            @RequestParam(defaultValue = "333333", required = false) String serialNumber,
+            @RequestParam(defaultValue = "10",required = false) Integer validityInDays,
+            @RequestParam(defaultValue = "", required = false) String nome,
+            @RequestParam(defaultValue = "", required = false) String cpf
 
     )throws Exception {
         KeyPair myKeyPair = CriaCertificadoTest.genKeyPair(2048);
@@ -41,7 +50,7 @@ public class CriaCertController {
         char[] password = "123456".toCharArray();
         KeyStore ks = KeyStore.getInstance("JKS");
         // carrega o certificado da AC
-        InputStream in = new FileInputStream("actest.jks");
+        InputStream in = jksfile.getInputStream();
         ks.load(in, password);
         in.close();
 
@@ -55,7 +64,9 @@ public class CriaCertController {
                 myKeyPair,
                 acKeyPair,
                 acSubject, cpf, acCert);
-        return new Response("ok", cert.toString());
+        ByteArrayOutputStream out =(ByteArrayOutputStream) CriaCertificadoTest.saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert);
+        
+        return new Response("ok",  new String(Base64.encode(out.toByteArray())));
     }
 
 }
