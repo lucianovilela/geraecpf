@@ -88,14 +88,14 @@ public class CriaCertificadoTest {
         int validityDays = 365 * 3;
         X509Certificate cert = createCert("C=BR,O=ICP-Brasil,OU=AR Teste,OU=RFB e-CPF A3,OU=TESTE,CN=" + nome + ":" + cpf,
                 new BigInteger("3333333333", 16), validityDays, myKeyPair, acKeyPair, acSubject, cpf, acCert);
-        saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert);
+        saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert, "123456");
         saveToFile(cert, filename + ".cer");
 
         System.out.println(cert);
     }
 
-    static public OutputStream saveToKeystore(X509Certificate certificate, PrivateKey privKey,  String type, X509Certificate acCert) throws Exception {
-        char[] password = "123456".toCharArray();
+    static public OutputStream saveToKeystore(X509Certificate certificate, PrivateKey privKey,  String type, X509Certificate acCert, String senha) throws Exception {
+        char[] password = senha.toCharArray();
         KeyStore ks = KeyStore.getInstance(type);
         ks.load(null, password);
 
