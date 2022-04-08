@@ -3,4 +3,5 @@ com\vilela\geraecpf\lib\CriaCertificadoTest.class
 com\vilela\geraecpf\lib\CriaAcTest.class
 com\vilela\geraecpf\SwaggerConfig.class
 com\vilela\geraecpf\controller\CriaCertController$Response.class
+com\vilela\geraecpf\WebConfiguration.class
 com\vilela\geraecpf\App.class
