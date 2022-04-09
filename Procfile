@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/geraecpf-1.0.jar
+web: java $JAVA_OPTS -jar target/geraecpf-1.0.0jar
