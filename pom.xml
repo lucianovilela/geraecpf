@@ -18,7 +18,7 @@
   <url>http://www.example.com</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>11</java.version>
+    <java.runtime.version>11</java.runtime.version>
     <start-class>com.vilela.geraecpf.App</start-class>
   </properties>
   <dependencies>
