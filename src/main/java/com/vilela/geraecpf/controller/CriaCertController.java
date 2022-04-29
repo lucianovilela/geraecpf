@@ -69,7 +69,7 @@ public class CriaCertController {
                 myKeyPair,
                 acKeyPair,
                 acSubject, cpf, acCert);
-        ByteArrayOutputStream out =(ByteArrayOutputStream) CriaCertificadoTest.saveToKeystore(cert, myKeyPair.getPrivate(),  "PKCS12", acCert, senha);
+        ByteArrayOutputStream out =(ByteArrayOutputStream) CriaCertificadoTest.saveToKeystore(cert, myKeyPair.getPrivate(),  "BCPKCS12", acCert, senha);
         
         return new Response("ok",  new String(Base64.encode(out.toByteArray())));
     }
