@@ -87,6 +87,30 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
+
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>3.0.0</version>
+					<executions>
+						<execution>
+							<id>generate view</id>
+							<phase>generate-resources</phase>
+							<configuration>
+								<target>
+									<exec executable="bash">
+										<arg value="-c"/>
+										<arg value="cd view/nextjs ; npm install; npm run export"/>
+									</exec>
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+
 			</plugins>
 
 
