@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { TextField, Stack, Button, Box, Link, CircularProgress } from '@mui/material';
+import { TextField, Stack, Button, Box, Link, CircularProgress, Alert, AlertTitle, Snackbar } from '@mui/material';
 import EnhancedEncryptionIcon from '@mui/icons-material/EnhancedEncryption';
 const INITIAL_VALUE = {
     subject: "C=BR,O=ICP-Brasil,OU=AR Teste,OU=RFB e-CPF A3,OU=TESTE",
     serialNumber: '',
     validityInDays: '365',
     nome: '',
-    cpf: '',
+    cpf: '11111111111',
     senha: '123456',
     certificado: undefined,
-    loading: false
+    loading: false,
+    error: false,
+    errorMsg: null
 };
 export const FormCertificado = () => {
     const geraCerticado = () => {
@@ -23,6 +25,10 @@ export const FormCertificado = () => {
                     setObj(ant => ({ ...ant, certificado: resposta.message }));
                 }
 
+            })
+            .catch(err => {
+                setObj(obj => ({ ...obj, loading: false, error: true, errorMsg: "Erro ao gerar certificado" }));
+
             });
 
     }
@@ -30,6 +36,14 @@ export const FormCertificado = () => {
     const [obj, setObj] = useState(INITIAL_VALUE);
     return (
         <React.Fragment>
+            <Snackbar open={obj.error} autoHideDuration={5000} onClose={()=>{setObj({ ...obj, error: false})}}>
+
+                <Alert variant="filled" severity="error">
+                    <AlertTitle>Erro</AlertTitle>
+                    {obj.errorMsg}
+                </Alert>
+            </Snackbar>
+
             <Stack direction="column" spacing={1} >
                 <TextField label="Subject" placeholder="subject"
                     value={obj.subject}
@@ -52,6 +66,7 @@ export const FormCertificado = () => {
                 <TextField
                     label="CPF" placeholder="cpf"
                     value={obj.cpf}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                     onChange={(e) => (setObj(ant => ({ ...ant, cpf: e.target.value })))} />
 
                 <TextField

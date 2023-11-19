@@ -3,6 +3,10 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: mvn install -DskipTests=false
+  - name: Init and Run
+    init: mvn install -DskipTests=false
+    command: java -jar target/geraecpf-1.0.0.jar
+
+
 
 
